@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1e7a46">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Custom pentad-based bird checklist</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="masthead">
+  <h1>Custom pentad-based bird checklist</h1>
+  <p id="where">Birds recorded in your area in {{ year }}, from most to least common.</p>
+</header>
+
+<main>
+  <section id="welcome" class="panel">
+    <p>Find or input your current pentad and get a custom checklist ranked by how often birds were recorded there this year.
+      <p>Data comes from the
+      <a href="https://sabap2.birdmap.africa/" target="_blank" rel="noopener">Southern African Bird Atlas Project 2</a>.
+        Be sure to log your sightings and contribute to this great project!</p>
+    <button id="btn-locate" class="btn primary" type="button">Use my location</button>
+    <details>
+      <summary>Enter a pentad instead</summary>
+      <form id="pentad-form" class="inline-form">
+        <input id="pentad-input" inputmode="numeric" autocomplete="off" placeholder="3400_2300" pattern="\d{4}_\d{4}" aria-label="Pentad code">
+        <button class="btn" type="submit">Load</button>
+      </form>
+    </details>
+    <p id="msg" class="msg" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="app" hidden>
+    <div class="sticky">
+      <div class="count"><strong id="seen-count">0</strong><span id="total-count">/ 0</span><em id="seen-pct">0%</em></div>
+      <div class="bar"><i id="bar-fill"></i></div>
+      <div class="tabs" role="tablist">
+        <button type="button" data-view="all" class="on">All</button>
+        <button type="button" data-view="todo">Not seen yet</button>
+        <button type="button" data-view="seen">Seen</button>
+      </div>
+    </div>
+
+    <div class="panel" id="map-panel">
+      <h2>Pentad location:</h2>
+      <div id="map" role="img" aria-label="Map showing the pentad square and your location"></div>
+      <p id="map-note" class="meta"></p>
+    </div>
+
+    <div class="panel" id="insights">
+      <h2>How you're doing</h2>
+      <dl id="tiers" class="tiers"></dl>
+      <h3>Best bets still to find</h3>
+      <ol id="next" class="next"></ol>
+      <p id="meta" class="meta"></p>
+    </div>
+
+    <input id="search" type="search" placeholder="Search birds" aria-label="Search birds" autocomplete="off">
+    <ul id="list" class="list"></ul>
+
+    <div class="actions">
+      <button id="btn-change" class="btn" type="button">Change location</button>
+      <button id="btn-reset" class="btn danger" type="button">Clear ticks</button>
+    </div>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
