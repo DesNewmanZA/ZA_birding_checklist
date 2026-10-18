@@ -12,8 +12,8 @@ from python_functions import fetch_bird_data, get_year_to_date_range, get_previo
 #######################################
 # Pentad codes are of the form 4 digits underscore 4 digits - all other inputs must be rejected
 PENTAD_RE = re.compile(r"^\d{4}_\d{4}$")
-# There must be at least one full protocol card for the current year and pentad under consideration
-MIN_CARDS = 1
+# # Minimum number of cards needed to use the current year's data, else default to prior year's data
+MIN_CARDS = 3
 
 ##################
 # MAIN FLASK APP #
@@ -52,7 +52,7 @@ def checklist():
     fallback = False
     try:
         data = fetch_bird_data(pentad, start, end)
-        # If there are no valid full protocol cards for the year, default to the prior year's data
+        # If there are not enough cards for the year, default to the prior year's data
         if data["cards"] < MIN_CARDS:
             prev_start, prev_end = get_previous_year_range()
             prev_data = fetch_bird_data(pentad, prev_start, prev_end)

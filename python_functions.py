@@ -8,7 +8,7 @@ from datetime import date
 ###########################
 # DEFINE NEEDED VARIABLES #
 ###########################
-# SABAP2 endpoint for full protocol records - {start}, {end} and {pentad} are filled in per request
+# SABAP2 endpoint for records - {start}, {end} and {pentad} are filled in per request
 API_URL = "https://api.birdmap.africa/sabap2/v2/R/{start}/{end}/pentad/{pentad}/data"
 
 
@@ -35,7 +35,7 @@ def _species_name(obs):
 
 def fetch_bird_data(pentad, start_date, end_date):
     """
-    Pulls SABAP2 full-protocol observations for a pentad and ranks species by descending reporting rate.
+    Pulls SABAP2 observations for a pentad and ranks species by descending reporting rate.
 
     Args:
         pentad (str): pentad code of the form xxxx_yyyy

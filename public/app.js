@@ -254,11 +254,11 @@
 
     // Footnote. If this year had no data, the server sent last year's and we say so.
     const fallbackNote = data.fallback
-      ? `No records for ${new Date().getFullYear()} yet, so this uses ${data.year}'s data. `
+      ? `Too few submissions for ${new Date().getFullYear()} so far, so this uses ${data.year}'s data. `
       : "";
     $("meta").textContent = fallbackNote +
-      `Based on ${data.cards} full-protocol atlas checklists, ${data.start} to ${data.end}. ` +
-      "Percentages show how many checklists each bird was recorded on.";
+      `Based on ${data.cards} SABAP2 submissions, ${data.start} to ${data.end}. ` +
+      "Percentages show how many submissions each bird was recorded on.";
   }
 
   // The list of birds, filtered by the current tab and search text
@@ -275,7 +275,7 @@
     if (!rows.length) {
       const message = data.species.length
         ? "No birds match."
-        : "No full-protocol cards found for this pentad this year or last.";
+        : "No SABAP2 submissions found for this pentad this year or last.";
       $("list").innerHTML = `<li class="empty">${message}</li>`;
       return;
     }
@@ -378,6 +378,7 @@
     view = chosenView;
     document.querySelectorAll(".tabs button").forEach((button) => {
       button.classList.toggle("on", button === event.target);   // highlight the active tab
+      button.setAttribute("aria-pressed", button === event.target);
     });
     render();
   });
