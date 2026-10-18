@@ -7,6 +7,13 @@ The aim isn't to replace existing birding apps or checklists, but rather to comp
 
 Getting started is simple: select a pentad using your location, choose a spot on the map, or enter a pentad code manually. Tickbird retrieves the available cards for that pentad and ranks recorded species from most to least frequently recorded. You can then work through the checklist and tick off the birds you spot along the way.
 
+### Why I built Tickbird
+I'm a birding enthusiast, and I'm always on the lookout for birds in my daily life. I sometimes battle to identify the trickier ones, and I also like keeping lists and turning things into games.
+
+The first version of this idea was my project submission for Day 96 of the 100 Days of Python bootcamp ([view the original](https://github.com/DesNewmanZA/Python_bootcamp/tree/main/Coding%20exercises/Day_96)). It worked for one specific pentad, capturing Leisure Isle in Knysna, one of my favourite birding spots, and it was never hosted. 
+
+I wanted a version that adapts to wherever I am at any given time and that I can use on my phone, and Vercel's free hosting did the trick. 
+
 ### What is a pentad?
 A pentad is the grid square SABAP2 uses to organise its records: five minutes of latitude by five minutes of longitude. Each pentad has a code made from the position of its north-west corner, for example `3400_2300`.
 
@@ -76,7 +83,7 @@ The following files and directories are relevant to the application.
    python app.py
    ```
 
-5. Open the local address displayed by Flask (usually http://127.0.0.1:5000) in your browser.
+5. Open the local address displayed by Flask.
 
 Geolocation only works on localhost or HTTPS addresses. If you want to test "Use my location" on a phone, deploy the app (for example, to Vercel) and open the HTTPS address.
 
