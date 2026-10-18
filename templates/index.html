@@ -6,46 +6,108 @@
   <meta name="theme-color" content="#1e7a46">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <title>Custom pentad-based bird checklist</title>
+  <title>Tickbird: pentad birding checklist</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
   <link rel="stylesheet" href="/style.css">
+
+  <script>
+    window.va = window.va || function () {
+      (window.vaq = window.vaq || []).push(arguments);
+    };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
+
 <body>
 <header class="masthead">
-  <h1>Custom pentad-based bird checklist</h1>
-  <p id="where">Birds recorded in your area in {{ year }}, from most to least common.</p>
+  <h1 class="brand"><img src="/favicon.svg" alt="" width="40" height="40">Tickbird</h1>
+  <h2>Pentad-based birding checklist</h2>
+  <p id="where">Birds recorded in your area in {{ year }}, ranked from most to least common.</p>
 </header>
 
 <main>
-  <section id="welcome" class="panel">
-    <p>Find or input your current pentad and get a custom checklist ranked by how often birds were recorded there this year.
-      <p>Data comes from the
-      <a href="https://sabap2.birdmap.africa/" target="_blank" rel="noopener">Southern African Bird Atlas Project 2</a>.
-        Be sure to log your sightings and contribute to this great project!</p>
-    <button id="btn-locate" class="btn primary" type="button">Use my location</button>
-    <details>
-      <summary>Enter a pentad instead</summary>
-      <form id="pentad-form" class="inline-form">
-        <input id="pentad-input" inputmode="numeric" autocomplete="off" placeholder="3400_2300" pattern="\d{4}_\d{4}" aria-label="Pentad code">
-        <button class="btn" type="submit">Load</button>
-      </form>
-    </details>
-    <p id="msg" class="msg" role="status" aria-live="polite"></p>
+  <div id="welcome">
+    <section class="panel">
+      <p>Birding somewhere and wondering what to look out for? Tickbird builds a checklist of the birds recorded around
+        you this year, ranked from most to least commonly seen. Share your location, pick a point on a map, or type in a
+        pentad to get started.</p>
+      <p>Use it alongside your favourite birding app. Get a feel for what to expect in a new area without having to
+        examine a distribution map, use it to sense-check a sighting, or turn a familiar pentad into a game by seeing
+        how many birds you can tick off!</p>
+      <p>Your location and checklist progress are stored locally in your browser. Checklist data is cached in your
+        browser for convenience.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Find your pentad</h2>
+      <div class="methods">
+        <details class="method" id="loc-details">
+          <summary><span><span class="m-title">Use my location</span>
+            <span class="m-sub">Find the pentad you're standing in</span></span></summary>
+          <div class="m-body">
+            <p class="meta">Your position stays in your browser. Only the pentad code is sent to Tickbird.</p>
+            <button id="btn-locate" class="btn primary" type="button">Find my pentad</button>
+          </div>
+        </details>
+
+        <details class="method" id="pick-details">
+          <summary><span><span class="m-title">Pick a point on the map</span>
+            <span class="m-sub">Find a pentad on the map</span></span></summary>
+          <div class="m-body">
+            <div id="pick-map" role="application" aria-label="Map: tap where you are birding to choose a pentad"></div>
+            <p id="pick-note" class="meta">Tap the map where you're birding. Zoom in for accuracy.</p>
+            <button id="btn-pick-go" class="btn primary" type="button" disabled>Use this pentad</button>
+          </div>
+        </details>
+
+        <details class="method" id="code-details">
+          <summary><span><span class="m-title">Enter a pentad code</span>
+            <span class="m-sub">Find a pentad based on its unique code</span></span></summary>
+          <div class="m-body">
+            <form id="pentad-form" class="inline-form">
+              <input id="pentad-input" inputmode="numeric" autocomplete="off" placeholder="3400_2300"
+                     pattern="\d{4}_\d{4}" aria-label="Pentad code">
+              <button class="btn primary" type="submit">Load</button>
+            </form>
+          </div>
+        </details>
+      </div>
+      <p id="msg" class="msg" role="status" aria-live="polite"></p>
+    </section>
+  </div>
+
+
+  <section id="credits" class="panel credits">
+    <h2>About the data</h2>
+    <p>All birding data comes from the
+      <a href="https://sabap2.birdmap.africa/" target="_blank" rel="noopener">Southern African Bird Atlas Project 2
+      (SABAP2)</a>, a citizen science project run from the University of Cape Town and built on the checklists
+      of volunteer atlasers. Tickbird is an independent hobby project made by a birding enthusiast. It is not
+      affiliated with or endorsed by SABAP2. It is free, non-commercial, and keeps its requests to the atlas light by
+      caching results for a day.</p>
+    <p>If Tickbird adds to your birding enjoyment, the best way to say thanks is to
+      <a href="https://sabap2.birdmap.africa/howto" target="_blank" rel="noopener">atlas a pentad yourself</a>
+      or <a href="https://sabap2.birdmap.africa/donations" target="_blank" rel="noopener">support the SABAP2
+        project</a>.</p>
   </section>
 
   <section id="app" hidden>
     <div class="sticky">
-      <div class="count"><strong id="seen-count">0</strong><span id="total-count">/ 0</span><em id="seen-pct">0%</em></div>
+      <div class="count"><strong id="seen-count">0</strong><span id="total-count">/ 0</span><em
+              id="seen-pct">0%</em></div>
       <div class="bar"><i id="bar-fill"></i></div>
       <div class="tabs" role="tablist">
         <button type="button" data-view="all" class="on">All</button>
-        <button type="button" data-view="todo">Not seen yet</button>
+        <button type="button" data-view="todo">Not yet seen</button>
         <button type="button" data-view="seen">Seen</button>
       </div>
     </div>
 
     <div class="panel" id="map-panel">
-      <h2>Pentad location:</h2>
+      <h2>Pentad location</h2>
       <div id="map" role="img" aria-label="Map showing the pentad square and your location"></div>
       <p id="map-note" class="meta"></p>
     </div>
@@ -66,6 +128,12 @@
       <button id="btn-reset" class="btn danger" type="button">Clear ticks</button>
     </div>
   </section>
+
+    <footer>
+      <p class="meta">Bird records: <a href="https://sabap2.birdmap.africa/" target="_blank" rel="noopener">SABAP2</a>
+        (University of Cape Town, FitzPatrick Institute of African Ornithology and SANBI) and its volunteer contributors.
+        Map: © OpenStreetMap contributors. Tickbird is an unofficial hobby project and not endorsed by SABAP2.</p>
+    </footer>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script src="/app.js"></script>
